@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.vishwasure555.sportsscore",
+      "sha256_cert_fingerprints": [
+        "C0:37:66:09:3F:38:14:DB:C5:2A:08:17:0D:81:B7:04:99:2B:5A:D2:6E:6F:B4:CD:FF:6E:87:35:31:44:44:D4"
+      ]
+    }
+  }
+]
