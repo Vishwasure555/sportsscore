@@ -29,6 +29,16 @@ jobs:
       - name: Install Bubblewrap
         run: npm install -g @bubblewrap/cli@1.27.0
 
+      - name: Prepare Android SDK for Bubblewrap
+        run: |
+          # Bubblewrap looks for sdkmanager under <sdk>/tools/bin; the runner ships it in cmdline-tools/latest.
+          [ -e "$ANDROID_HOME/tools" ] || ln -s "$ANDROID_HOME/cmdline-tools/latest" "$ANDROID_HOME/tools"
+          # Install the build-tools version Bubblewrap expects, accepting licences non-interactively.
+          BT=$(node -p "require('$(npm root -g)/@bubblewrap/cli/node_modules/@bubblewrap/core/dist/lib/androidSdk/AndroidSdkTools.js').BUILD_TOOLS_VERSION" 2>/dev/null || node -p "require('$(npm root -g)/@bubblewrap/core/dist/lib/androidSdk/AndroidSdkTools.js').BUILD_TOOLS_VERSION")
+          echo "Bubblewrap wants build-tools $BT"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "build-tools;$BT" > /dev/null
+
       - name: Point Bubblewrap at the runner's JDK and Android SDK
         run: |
           mkdir -p ~/.bubblewrap
