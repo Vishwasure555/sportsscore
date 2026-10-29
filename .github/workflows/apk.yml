@@ -70,7 +70,7 @@ jobs:
           set -e
           if [ "$code" != "0" ] || [ ! -f app-release-signed.apk ]; then
             # Surface the end of the log as an annotation so it shows on the run page.
-            msg=$(tail -n 40 ../build.log | sed 's/\x1b\[[0-9;]*m//g' | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')
+            msg=$( (grep -A 25 'What went wrong' ../build.log || tail -n 40 ../build.log) | head -40 | sed 's/\x1b\[[0-9;]*m//g' | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')
             echo "::error title=Bubblewrap build failed::$msg"
             exit 1
           fi
